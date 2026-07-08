@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { createFoodSchema } from "../validators/menu.validator.js";
+import { createFood } from "../services/menu.service.js";
 
 export const getMenu = (req: Request, res: Response) => {
   const menu = [
@@ -23,7 +24,7 @@ export const getMenu = (req: Request, res: Response) => {
   });
 };
 
-export const addFood = (req: Request, res: Response) => {
+export const addFood = async (req: Request, res: Response) => {
   const result = createFoodSchema.safeParse(req.body);
 
   if (!result.success) {
@@ -33,15 +34,23 @@ export const addFood = (req: Request, res: Response) => {
     });
   }
 
-  const food = result.data;
+  try {
+    //const food = result.data;
+    const food = await createFood(result.data);
 
-  console.log(food);
+    console.log(food);
 
-
-  res.status(201).json({
-    success: true,
-    message: "Food added successfully!",
-    data: food,
-  });
+    res.status(201).json({
+      success: true,
+      message: "Food added successfully!",
+      data: food,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+    
 };
 
