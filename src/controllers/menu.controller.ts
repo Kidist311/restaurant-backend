@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+import { createFoodSchema } from "../validators/menu.validator.js";
 
 export const getMenu = (req: Request, res: Response) => {
   const menu = [
@@ -23,9 +24,19 @@ export const getMenu = (req: Request, res: Response) => {
 };
 
 export const addFood = (req: Request, res: Response) => {
-  const food = req.body;
+  const result = createFoodSchema.safeParse(req.body);
+
+  if (!result.success) {
+    return res.status(400).json({
+      success: false,
+      errors: result.error.flatten().fieldErrors,
+    });
+  }
+
+  const food = result.data;
 
   console.log(food);
+
 
   res.status(201).json({
     success: true,
@@ -34,13 +45,3 @@ export const addFood = (req: Request, res: Response) => {
   });
 };
 
-export const getFoodById = (req: Request, res: Response) => {
-  const id = req.params.id;
-
-  console.log(id);
-
-  res.json({
-    message: "Food found",
-    foodId: id,
-  });
-};
