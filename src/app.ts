@@ -1,5 +1,5 @@
 import express from "express";
-import menuRoutes from "./routes/menu.routes.js";
+//import menuRoutes from "./routes/menu.routes.js";
 import { logger } from "./middlewares/logger.middleware.js";
 
 const app = express();
@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
 })
 
 // MENU ROUTES
-app.use("/api/menu", menuRoutes);
+//app.use("/api/menu", menuRoutes);
 
 
 export default app;
