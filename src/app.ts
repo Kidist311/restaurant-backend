@@ -1,6 +1,7 @@
 import express from "express";
 //import menuRoutes from "./routes/menu.routes.js";
 import { logger } from "./middlewares/logger.middleware.js";
+import authRouter from "./modules/auth/auth.route.js";
 
 const app = express();
 
@@ -10,6 +11,10 @@ app.use(express.json());
 
 // custom middleware
 app.use(logger);
+
+
+// Auth Routes
+app.use("/api/v1/auth", authRouter);
 
 // First Route
 app.get("/", (req, res) => {
