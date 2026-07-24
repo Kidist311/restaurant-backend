@@ -15,10 +15,28 @@ const register =
     message: "User registered successfully",
     data: result,
   });
-    
-  
+   
+}
+
+
+
+const login = async (
+  req: Request,
+  res: Response
+) => {
+
+  const result = await authService.login(req.body);
+
+  return res.status(200).json({
+    success: true,
+    message: "Login successful",
+    data: result,
+  });
+
 };
+
 
 export const authController = {
   register: asyncHandler(register),
+  login: asyncHandler(login),
 };
