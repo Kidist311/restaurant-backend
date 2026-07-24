@@ -1,7 +1,12 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { authService } from "./auth.service.js";
 
-const register = async (req: Request, res: Response) => {
+const register =
+ async (
+  req: Request, 
+  res: Response,
+  next: NextFunction ) => {
+    try{
   const result = await authService.register(req.body);
 
   return res.status(201).json({
@@ -9,6 +14,10 @@ const register = async (req: Request, res: Response) => {
     message: "User registered successfully",
     data: result,
   });
+    }catch (error) {
+      next(error);
+    }
+  
 };
 
 export const authController = {

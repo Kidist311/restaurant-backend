@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import { prisma } from "../../config/prisma.js";
+import { AppError } from "../../errors/AppError.js";
 
 interface RegisterPayload {
   name: string;
@@ -16,7 +17,10 @@ const register = async (payload: RegisterPayload) => {
   });
 
   if (existingUser) {
-    throw new Error("Email already exists");
+   //throw new AppError("Email already exists", 409);
+   throw new AppError("User not found", 404);
+  // throw new Error("Email already exists");
+  
   }
 
   // 2. Hash password
