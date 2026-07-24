@@ -1,12 +1,13 @@
 import type { Request, Response, NextFunction } from "express";
 import { authService } from "./auth.service.js";
+import { asyncHandler } from "../../utils/asyncHandler.js";
 
 const register =
  async (
   req: Request, 
   res: Response,
   next: NextFunction ) => {
-    try{
+    
   const result = await authService.register(req.body);
 
   return res.status(201).json({
@@ -14,12 +15,10 @@ const register =
     message: "User registered successfully",
     data: result,
   });
-    }catch (error) {
-      next(error);
-    }
+    
   
 };
 
 export const authController = {
-  register,
+  register: asyncHandler(register),
 };
