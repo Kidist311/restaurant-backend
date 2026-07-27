@@ -20,7 +20,35 @@ const createFood = async (
 
 };
 
+const getFoods = async (
+    req: Request,
+    res: Response
+  ) => {
+  
+    const foods = await foodService.getFoods();
+  
+    return res.status(200).json({
+      success: true,
+      data: foods,
+    });
+  };
+
+  const getFoodById = async (
+    req: Request,
+    res: Response
+  ) => {
+    const foodId = typeof req.params.id === 'string' ? req.params.id : '';
+    const food = await foodService.getFoodById(foodId);
+  
+    return res.status(200).json({
+      success: true,
+      data: food,
+    });
+  };
+
 
 export const foodController = {
   createFood,
+  getFoods,
+  getFoodById,
 };

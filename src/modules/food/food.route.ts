@@ -18,5 +18,15 @@ router.post(
   foodController.createFood
 );
 
+router.get(
+    "/",
+    foodController.getFoods
+  );
+
+
+  router.get(
+    "/:id",
+    foodController.getFoodById
+  );
 
 export default router;
