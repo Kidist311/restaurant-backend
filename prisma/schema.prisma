@@ -49,7 +49,7 @@ model Food {
   name        String
   description String?
   price       Decimal
-  imageUrl    String?
+  imageUrl    String
   available   Boolean @default(true)
 
   categoryId String

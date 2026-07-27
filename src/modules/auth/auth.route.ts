@@ -30,7 +30,7 @@ router.get(
   "/profile",
   authMiddleware,
   //authorize("CUSTOMER"),
-  authorize(Role.OWNER, Role.STAFF, Role.CUSTOMER),
+  authorize(Role.OWNER, Role.CUSTOMER, Role.STAFF),
   authController.profile
 );
 

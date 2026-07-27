@@ -3,6 +3,7 @@ import express from "express";
 import { logger } from "./middlewares/logger.middleware.js";
 import authRouter from "./modules/auth/auth.route.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
+import foodRoutes from "./modules/food/food.route.js";
 
 const app = express();
 
@@ -26,6 +27,11 @@ app.get("/", (req, res) => {
     message: "Welcome to Restaurant Backend API 🚀",
   });
 })
+
+app.use(
+  "/api/v1/foods",
+  foodRoutes
+); 
 
 // MENU ROUTES
 //app.use("/api/menu", menuRoutes);
