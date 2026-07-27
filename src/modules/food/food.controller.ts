@@ -46,9 +46,47 @@ const getFoods = async (
     });
   };
 
+  const updateFood = async (
+    req: Request,
+    res: Response
+  ) => {
+  
+    const food = await foodService.updateFood(
+      typeof req.params.id === 'string' ? req.params.id : '',
+      req.body
+    );
+  
+  
+    return res.status(200).json({
+      success: true,
+      message: "Food updated successfully",
+      data: food,
+    });
+  };
+
+
+  const deleteFood = async (
+    req: Request,
+    res: Response
+  ) => {
+  
+    const food = await foodService.deleteFood(
+      typeof req.params.id === 'string' ? req.params.id : ''
+    );
+  
+  
+    return res.status(200).json({
+      success: true,
+      message: "Food deleted successfully",
+      data: food,
+    });
+  };
+
 
 export const foodController = {
   createFood,
   getFoods,
   getFoodById,
+  updateFood,
+  deleteFood,
 };
