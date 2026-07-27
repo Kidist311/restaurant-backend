@@ -36,7 +36,21 @@ const login = async (
 };
 
 
+const profile = async (
+  req: Request,
+  res: Response
+) => {
+
+  return res.status(200).json({
+    success: true,
+    message: "Profile fetched successfully",
+    data: req.user,
+  });
+
+};
+
 export const authController = {
   register: asyncHandler(register),
   login: asyncHandler(login),
+  profile: asyncHandler(profile),
 };
