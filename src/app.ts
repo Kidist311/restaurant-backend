@@ -5,6 +5,7 @@ import authRouter from "./modules/auth/auth.route.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 import foodRoutes from "./modules/food/food.route.js";
 import categoryRoutes from "./modules/category/category.route.js";
+import orderRoutes from "./modules/order/order.route.js";
 
 const app = express();
 
@@ -37,6 +38,11 @@ app.use(
 app.use(
   "/api/v1/categories",
   categoryRoutes
+);
+
+app.use(
+  "/api/v1/orders",
+  orderRoutes
 );
 // MENU ROUTES
 //app.use("/api/menu", menuRoutes);
