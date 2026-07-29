@@ -48,11 +48,9 @@ const createOrder = async (
   }
 
 
-
+//
   // 2. Create Order and OrderItems together
   const order = await prisma.$transaction(async (tx) => {
-
-
     const createdOrder = await tx.order.create({
       data: {
         userId,
