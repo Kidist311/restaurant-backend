@@ -10,3 +10,11 @@ export type CreateReservationPayload = {
   
     numberOfGuests: number;
   };
+
+  export type UpdateReservationStatusPayload = {
+    status:
+      | "PENDING"
+      | "CONFIRMED"
+      | "CANCELLED"
+      | "COMPLETED";
+  };

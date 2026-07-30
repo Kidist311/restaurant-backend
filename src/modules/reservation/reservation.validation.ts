@@ -16,3 +16,12 @@ export const createReservationSchema = z.object({
 
   numberOfGuests: z.number().min(1),
 });
+
+export const updateReservationStatusSchema = z.object({
+  status: z.enum([
+    "PENDING",
+    "CONFIRMED",
+    "CANCELLED",
+    "COMPLETED",
+  ]),
+});
