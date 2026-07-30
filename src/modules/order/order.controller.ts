@@ -1,6 +1,7 @@
 
 import type { Request, Response } from "express";
 import { orderService } from "./order.service.js";
+import { get } from "node:http";
 
 const createOrder = async (
     req: Request,
@@ -24,6 +25,41 @@ const createOrder = async (
   
   };
 
+  const getMyOrders = async (
+    req: Request,
+    res: Response
+  ) => {
+  
+    const orders = await orderService.getMyOrders(
+      req.user.id
+    );
+  
+    return res.status(200).json({
+      success: true,
+      message: "Orders retrieved successfully",
+      data: orders,
+    });
+  };
+
+
+  const getAllOrders = async (
+    req: Request,
+    res: Response
+  ) => {
+  
+    const orders = await orderService.getAllOrders();
+  
+    return res.status(200).json({
+      success: true,
+      message: "Orders retrieved successfully",
+      data: orders,
+    });
+  
+  };
+
+
   export const orderController = {
     createOrder,
+    getMyOrders,
+    getAllOrders,
   };
