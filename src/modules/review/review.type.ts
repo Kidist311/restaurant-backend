@@ -3,3 +3,8 @@ export type CreateReviewPayload = {
     rating: number;
     comment?: string;
   };
+
+  export type UpdateReviewPayload = {
+    rating?: number;
+    comment?: string;
+  };
