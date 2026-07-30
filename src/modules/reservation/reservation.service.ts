@@ -1,5 +1,6 @@
 import { prisma } from "../../config/prisma.js";
 import { AppError } from "../../errors/AppError.js";
+import type { ReservationStatus } from "../../generated/prisma/client.js";
 import type { CreateReservationPayload } from "./reservation.type.js";
 
 
@@ -55,7 +56,7 @@ const createReservation = async (
 
   const updateReservationStatus = async (
     reservationId: string,
-    status: string
+    status:  ReservationStatus,
   ) => {
   
     const reservation =
