@@ -6,6 +6,8 @@ import { errorMiddleware } from "./middlewares/error.middleware.js";
 import foodRoutes from "./modules/food/food.route.js";
 import categoryRoutes from "./modules/category/category.route.js";
 import orderRoutes from "./modules/order/order.route.js";
+import reservationRoutes from "./modules/reservation/reservation.route.js";
+
 
 const app = express();
 
@@ -45,6 +47,11 @@ app.use(
   "/api/v1/orders",
   orderRoutes
 
+);
+
+app.use(
+  "/api/v1/reservations",
+  reservationRoutes
 );
 
 
