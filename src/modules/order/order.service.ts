@@ -1,5 +1,6 @@
 import { prisma } from "../../config/prisma.js";
 import { AppError } from "../../errors/AppError.js";
+import type { OrderStatus } from "../../generated/prisma/client.js";
 import type { CreateOrderPayload, OrderItemData } from "./order.type.js";
 
 
@@ -126,8 +127,36 @@ const getAllOrders = async () => {
 };  
 
 
+const updateOrderStatus = async (
+  orderId: string,
+  status: OrderStatus
+) => {
+
+  const order = await prisma.order.findUnique({
+    where: {
+      id: orderId,
+    },
+  });
+
+  if (!order) {
+    throw new AppError("Order not found", 404);
+  }
+
+  const updatedOrder = await prisma.order.update({
+    where: {
+      id: orderId,
+    },
+    data: {
+      status,
+    },
+  });
+
+  return updatedOrder;
+};
+
 export const orderService = {
   createOrder,
   getMyOrders,
   getAllOrders,
+  updateOrderStatus,
 };

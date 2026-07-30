@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { validate } from "../../middlewares/validate.middleware.js";
-import { createOrderSchema } from "./order.validation.js";
+import { createOrderSchema, updateOrderStatusSchema } from "./order.validation.js";
 import { authMiddleware } from "../auth/auth.middleware.js";
 import { orderController } from "./order.controller.js";
 //import { authorize } from "../../middlewares/authorize.middleware.js";
@@ -33,5 +33,14 @@ router.get(
   authorize(Role.OWNER),
   orderController.getAllOrders
 );
+
+router.patch(
+  "/:id/status",
+  authMiddleware,
+  authorize(Role.OWNER),
+  validate(updateOrderStatusSchema),
+  orderController.updateOrderStatus
+);
+
 
 export default router;
