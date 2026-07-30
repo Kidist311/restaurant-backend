@@ -7,6 +7,7 @@ import foodRoutes from "./modules/food/food.route.js";
 import categoryRoutes from "./modules/category/category.route.js";
 import orderRoutes from "./modules/order/order.route.js";
 import reservationRoutes from "./modules/reservation/reservation.route.js";
+import reviewRoutes from "./modules/review/review.route.js";
 
 
 const app = express();
@@ -54,6 +55,11 @@ app.use(
   reservationRoutes
 );
 
+
+app.use(
+  "/api/v1/reviews",
+  reviewRoutes
+);
 
 // MENU ROUTES
 //app.use("/api/menu", menuRoutes);
