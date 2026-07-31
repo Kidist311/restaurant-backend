@@ -18,4 +18,21 @@ router.post(
   blogController.createBlog
 );
 
+router.get(
+  "/",
+  blogController.getPublishedBlogs
+);
+
+router.get(
+  "/:id",
+  blogController.getPublishedBlogById
+);
+
+router.patch(
+  "/:id/publish",
+  authMiddleware,
+  authorize(Role.OWNER),
+  blogController.publishBlog
+);
+
 export default router;

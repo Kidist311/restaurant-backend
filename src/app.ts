@@ -8,7 +8,7 @@ import categoryRoutes from "./modules/category/category.route.js";
 import orderRoutes from "./modules/order/order.route.js";
 import reservationRoutes from "./modules/reservation/reservation.route.js";
 import reviewRoutes from "./modules/review/review.route.js";
-
+import blogRoutes from "./modules/blog/blog.route.js";
 
 const app = express();
 
@@ -59,6 +59,11 @@ app.use(
 app.use(
   "/api/v1/reviews",
   reviewRoutes
+);
+
+app.use(
+  "/api/v1/blogs",
+  blogRoutes
 );
 
 // MENU ROUTES
