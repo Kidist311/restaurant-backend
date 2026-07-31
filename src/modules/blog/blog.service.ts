@@ -1,7 +1,7 @@
 import { prisma } from "../../config/prisma.js";
 import { AppError } from "../../errors/AppError.js";
 import { BlogStatus } from "../../generated/prisma/client.js";
-import type { CreateBlogPayload } from "./blog.type.js";
+import type { CreateBlogPayload, UpdateBlogPayload } from "./blog.type.js";
 
 const createBlog = async (
   authorId: string,
@@ -89,10 +89,72 @@ const publishBlog = async (
   return publishedBlog;
 };
 
+const updateBlog = async (
+  blogId: string,
+  authorId: string,
+  payload: UpdateBlogPayload
+) => {
+
+  const blog = await prisma.blog.findUnique({
+    where: {
+      id: blogId,
+    },
+  });
+
+  if (!blog) {
+    throw new AppError("Blog not found", 404);
+  }
+
+  if (blog.authorId !== authorId) {
+    throw new AppError(
+      "You are not allowed to update this blog",
+      403
+    );
+  }
+
+  const updatedBlog = await prisma.blog.update({
+    where: {
+      id: blogId,
+    },
+    data: payload,
+  });
+
+  return updatedBlog;
+};
+
+const deleteBlog = async (
+  blogId: string,
+  authorId: string
+) => {
+  const blog = await prisma.blog.findUnique({
+    where: {
+      id: blogId,
+    },
+  });
+
+  if (!blog) {
+    throw new AppError("Blog not found", 404);
+  }
+
+  if (blog.authorId !== authorId) {
+    throw new AppError(
+      "You are not allowed to delete this blog",
+      403
+    );
+  }
+
+  await prisma.blog.delete({
+    where: {
+      id: blogId,
+    },
+  });
+};
 
 export const blogService = {
   createBlog,
   getPublishedBlogs,
   getPublishedBlogById,
   publishBlog,
+  updateBlog,
+  deleteBlog,
 };

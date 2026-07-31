@@ -63,10 +63,44 @@ const publishBlog = async (
   });
 };
 
+const updateBlog = async (
+  req: Request,
+  res: Response
+) => {
+
+  const blog = await blogService.updateBlog(
+    req.params.id as string,
+    req.user.id,
+    req.body
+  );
+
+  return res.status(200).json({
+    success: true,
+    message: "Blog updated successfully",
+    data: blog,
+  });
+};
+
+const deleteBlog = async (
+  req: Request,
+  res: Response
+) => {
+  await blogService.deleteBlog(
+    req.params.id as string,
+    req.user.id
+  );
+
+  return res.status(200).json({
+    success: true,
+    message: "Blog deleted successfully",
+  });
+};
 
 export const blogController = {
   createBlog,
   getPublishedBlogs,
   getPublishedBlogById,
   publishBlog,
+  updateBlog,
+  deleteBlog,
 };

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { blogController } from "./blog.controller.js";
 
 import { validate } from "../../middlewares/validate.middleware.js";
-import { createBlogSchema } from "./blog.validation.js";
+import { createBlogSchema, updateBlogSchema } from "./blog.validation.js";
 import { authMiddleware } from "../auth/auth.middleware.js";
 import { authorize } from "../auth/role.middleware.js";
 import { Role } from "../../generated/prisma/client.js";
@@ -33,6 +33,21 @@ router.patch(
   authMiddleware,
   authorize(Role.OWNER),
   blogController.publishBlog
+);
+
+router.patch(
+  "/:id",
+  authMiddleware,
+  authorize(Role.OWNER),
+  validate(updateBlogSchema),
+  blogController.updateBlog
+);
+
+router.delete(
+  "/:id",
+  authMiddleware,
+  authorize(Role.OWNER),
+  blogController.deleteBlog
 );
 
 export default router;
