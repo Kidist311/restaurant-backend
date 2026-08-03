@@ -1,11 +1,12 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { AppError } from "../../errors/AppError.js";
+import { JWT_SECRET } from "../../config/env.js";
 
 // Define or import the Role type
-type Role = "admin" | "user" | "manager"; // Adjust the roles as per your application
+type Role = "admin" | "user" | "staff"; // Adjust the roles as per your application
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
+
 
 export const authMiddleware = (
   req: Request,

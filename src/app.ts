@@ -1,4 +1,6 @@
 import express from "express";
+import helmet from "helmet";
+import cors from "cors";
 //import menuRoutes from "./routes/menu.routes.js";
 import { logger } from "./middlewares/logger.middleware.js";
 import authRouter from "./modules/auth/auth.route.js";
@@ -11,6 +13,16 @@ import reviewRoutes from "./modules/review/review.route.js";
 import blogRoutes from "./modules/blog/blog.route.js";
 
 const app = express();
+
+app.use(helmet());
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    credentials: true,
+  })
+);
+
 
 // Middleware
 app.use(express.json());
