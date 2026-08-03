@@ -1,13 +1,11 @@
-import type { Request, Response, NextFunction } from "express";
+import type { Request, Response } from "express";
 import { AppError } from "../errors/AppError.js";
 
 export const errorMiddleware = (
   err: Error,
   req: Request,
-  res: Response,
-  next: NextFunction
+  res: Response
 ) => {
-
   console.error(err);
 
   if (err instanceof AppError) {
@@ -22,4 +20,3 @@ export const errorMiddleware = (
     message: "Internal server error",
   });
 };
-

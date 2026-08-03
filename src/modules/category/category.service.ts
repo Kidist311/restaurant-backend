@@ -1,4 +1,5 @@
 import { prisma } from "../../config/prisma.js";
+import { AppError } from "../../errors/AppError.js";
 import type { CreateCategoryPayload } from "./category.type.js";
 
 
@@ -40,7 +41,7 @@ const getCategories = async () => {
   
   
     if (!category) {
-      throw new Error("Category not found");
+      throw new AppError("Category not found", 404);
     }
   
   
