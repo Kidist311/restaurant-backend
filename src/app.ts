@@ -11,8 +11,11 @@ import orderRoutes from "./modules/order/order.route.js";
 import reservationRoutes from "./modules/reservation/reservation.route.js";
 import reviewRoutes from "./modules/review/review.route.js";
 import blogRoutes from "./modules/blog/blog.route.js";
+import { setupSwagger } from "./docs/swagger.js";
 
 const app = express();
+
+setupSwagger(app);
 
 app.use(helmet());
 
