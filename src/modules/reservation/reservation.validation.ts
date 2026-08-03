@@ -2,19 +2,22 @@ import { z } from "zod";
 
 
 export const createReservationSchema = z.object({
-  name: z.string().min(2),
+  name: z.string().trim().min(2),
   
-  email: z.string().email(),
+  email: z.string().trim().email(),
 
-  phone: z.string().min(9),
+  phone: z.string().trim().min(9),
 
   message: z.string().optional(),
 
   reservationDate: z.string(),
 
-  reservationTime: z.string(),
+  reservationTime: z.string().refine(
+    (value) => !Number.isNaN(Date.parse(value)),
+    "Invalid reservation date"
+  ),
 
-  numberOfGuests: z.number().min(1),
+  numberOfGuests: z.number().int().min(1),
 });
 
 export const updateReservationStatusSchema = z.object({

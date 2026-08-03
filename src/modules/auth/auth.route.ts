@@ -20,16 +20,9 @@ router.post(
   authController.login
 );
 
-/*router.get(
-  "/profile",
-  authMiddleware,
-  authController.profile
-);*/
-
 router.get(
   "/profile",
   authMiddleware,
-  //authorize("CUSTOMER"),
   authorize(Role.OWNER, Role.CUSTOMER, Role.STAFF),
   authController.profile
 );

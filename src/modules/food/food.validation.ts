@@ -13,9 +13,9 @@ export const createFoodSchema = z.object({
 });
 
 export const updateFoodSchema = z.object({
-    name: z.string().min(2).optional(),
+    name: z.string().trim().min(2).optional(),
   
-    description: z.string().optional(),
+    description: z.string().trim().optional(),
   
     price: z.number().positive().optional(),
   
