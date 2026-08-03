@@ -23,7 +23,7 @@ app.use(logger);
 // Auth Routes
 app.use("/api/v1/auth", authRouter);
 
-app.use(errorMiddleware);
+
 
 // First Route
 app.get("/", (req, res) => {
@@ -68,6 +68,7 @@ app.use(
 
 // MENU ROUTES
 //app.use("/api/menu", menuRoutes);
+app.use(errorMiddleware);
 
 
 export default app;

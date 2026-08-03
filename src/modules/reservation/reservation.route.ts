@@ -5,6 +5,7 @@ import { createReservationSchema, updateReservationStatusSchema } from "./reserv
 import { authMiddleware } from "../auth/auth.middleware.js";
 import { Role } from "../../generated/prisma/client.js";
 import { authorize } from "../auth/role.middleware.js";
+import { optionalAuthMiddleware } from "../auth/optional-auth.middleware.js";
 
 
 const router = Router();
@@ -12,6 +13,7 @@ const router = Router();
 
 router.post(
   "/",
+  optionalAuthMiddleware,
   validate(createReservationSchema),
   reservationController.createReservation
 );

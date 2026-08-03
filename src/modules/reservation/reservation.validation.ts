@@ -12,9 +12,9 @@ export const createReservationSchema = z.object({
 
   reservationDate: z.string(),
 
-  reservationTime: z.string().refine(
-    (value) => !Number.isNaN(Date.parse(value)),
-    "Invalid reservation date"
+  reservationTime: z.string().regex(
+    /^([01]\d|2[0-3]):([0-5]\d)$/,
+    "Invalid reservation time"
   ),
 
   numberOfGuests: z.number().int().min(1),

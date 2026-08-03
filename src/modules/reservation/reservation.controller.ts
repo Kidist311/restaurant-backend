@@ -9,7 +9,7 @@ const createReservation = async (
   const reservation =
     await reservationService.createReservation(
       req.body,
-      req.user.id
+      req.user?.id
     );
 
 
