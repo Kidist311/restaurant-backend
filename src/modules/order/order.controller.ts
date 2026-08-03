@@ -1,7 +1,6 @@
 
 import type { Request, Response } from "express";
 import { orderService } from "./order.service.js";
-import { get } from "node:http";
 
 const createOrder = async (
     req: Request,

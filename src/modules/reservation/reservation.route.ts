@@ -12,6 +12,7 @@ const router = Router();
 
 router.post(
   "/",
+  authMiddleware,
   validate(createReservationSchema),
   reservationController.createReservation
 );
@@ -34,13 +35,7 @@ router.get(
     authMiddleware,
     authorize(Role.OWNER),
     validate(updateReservationStatusSchema),
-    (req, res, next) => {
-      const id = typeof req.params.id === "string" ? req.params.id : "";
-      const status = typeof req.body.status === "string" ? req.body.status : "";
-      reservationController.updateReservationStatus(id, status)
-        .then((result) => res.json(result))
-        .catch(next);
-    }
+    reservationController.updateReservationStatus
   );
 
 export default router;

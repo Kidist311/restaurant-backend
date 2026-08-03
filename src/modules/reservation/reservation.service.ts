@@ -81,7 +81,7 @@ const createReservation = async (
           id: reservationId,
         },
         data: {
-          status: status as any,
+          status,
         },
       });
   

@@ -1,8 +1,5 @@
 import type { Request, Response } from "express";
 import { reservationService } from "./reservation.service.js";
-import { prisma } from "../../config/prisma.js";
-import { AppError } from "../../errors/AppError.js";
-
 
 const createReservation = async (
   req: Request,
@@ -11,7 +8,8 @@ const createReservation = async (
 
   const reservation =
     await reservationService.createReservation(
-      req.body
+      req.body,
+      req.user.id
     );
 
 
@@ -58,39 +56,22 @@ const getMyReservations = async (
   };
 
   const updateReservationStatus = async (
-    reservationId: string,
-    status: string
+    req: Request,
+    res: Response
   ) => {
-  
     const reservation =
-      await prisma.reservation.findUnique({
-        where: {
-          id: reservationId,
-        },
-      });
-  
-  
-    if (!reservation) {
-      throw new AppError(
-        "Reservation not found",
-        404
+      await reservationService.updateReservationStatus(
+        req.params.id as string,
+        req.body.status
       );
-    }
   
-  
-    const updatedReservation =
-      await prisma.reservation.update({
-        where: {
-          id: reservationId,
-        },
-        data: {
-          status: status as any,
-        },
-      });
-  
-  
-    return updatedReservation;
+    return res.status(200).json({
+      success: true,
+      message: "Reservation status updated successfully",
+      data: reservation,
+    });
   };
+
 
 export const reservationController = {
   createReservation,
