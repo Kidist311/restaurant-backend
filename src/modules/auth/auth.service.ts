@@ -18,9 +18,7 @@ const register = async (payload: RegisterPayload) => {
   });
 
   if (existingUser) {
-   //throw new AppError("Email already exists", 409);
-   throw new AppError("User not found", 404);
-  // throw new Error("Email already exists");
+   throw new AppError("Email already exists", 409);
   
   }
 
