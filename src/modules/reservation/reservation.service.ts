@@ -5,18 +5,66 @@ import type { CreateReservationPayload } from "./reservation.type.js";
 
 
 
+const RESTAURANT_CAPACITY = 50;
+
 const createReservation = async (
   payload: CreateReservationPayload,
   userId?: string
 ) => {
 
+  const reservationDate = new Date(
+    payload.reservationDate
+  );
+
+  // Check existing reservations for the same date and time
+  const startOfDay = new Date(reservationDate);
+  startOfDay.setHours(0, 0, 0, 0);
+  
+  const endOfDay = new Date(reservationDate);
+  endOfDay.setHours(23, 59, 59, 999);
+  
+  const existingReservations =
+    await prisma.reservation.findMany({
+      where: {
+        reservationDate: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+        reservationTime: payload.reservationTime,
+        status: {
+          not: "CANCELLED",
+        },
+      },
+      select: {
+        numberOfGuests: true,
+      },
+    });
+
+     // Calculate already reserved guests
+  const reservedGuests =
+  existingReservations.reduce(
+    (total, reservation) =>
+      total + reservation.numberOfGuests,
+    0
+  );
+
+// Check restaurant capacity
+if (
+  reservedGuests + payload.numberOfGuests >
+  RESTAURANT_CAPACITY
+) {
+  throw new AppError(
+    "Not enough reservation capacity available for this time",
+    400
+  );
+}
+
+
   const reservation = await prisma.reservation.create({
     data: {
       ...payload,
 
-      reservationDate: new Date(
-        payload.reservationDate
-      ),
+      reservationDate,
 
       ...(userId && { userId }),
     },
