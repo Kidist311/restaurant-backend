@@ -12,7 +12,6 @@ const router = Router();
 
 router.post(
   "/",
-  authMiddleware,
   validate(createReservationSchema),
   reservationController.createReservation
 );
