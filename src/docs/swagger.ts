@@ -163,6 +163,122 @@ UpdateFoodRequest: {
   },
 },
 
+CreateOrderRequest: {
+  type: "object",
+  required: ["items"],
+  properties: {
+    items: {
+      type: "array",
+      minItems: 1,
+      items: {
+        type: "object",
+        required: ["foodId", "quantity"],
+        properties: {
+          foodId: {
+            type: "string",
+            format: "uuid",
+            example: "550e8400-e29b-41d4-a716-446655440000",
+          },
+          quantity: {
+            type: "integer",
+            minimum: 1,
+            example: 2,
+          },
+        },
+      },
+    },
+  },
+},
+
+UpdateOrderStatusRequest: {
+  type: "object",
+  required: ["status"],
+  properties: {
+    status: {
+      type: "string",
+      enum: [
+        "PENDING",
+        "CONFIRMED",
+        "PREPARING",
+        "READY",
+        "COMPLETED",
+        "CANCELLED",
+      ],
+      example: "CONFIRMED",
+    },
+  },
+},
+
+CreateReservationRequest: {
+  type: "object",
+  required: [
+    "name",
+    "email",
+    "phone",
+    "reservationDate",
+    "reservationTime",
+    "numberOfGuests"
+  ],
+  properties: {
+    name: {
+      type: "string",
+      minLength: 2,
+      example: "John Doe",
+    },
+
+    email: {
+      type: "string",
+      format: "email",
+      example: "john@example.com",
+    },
+
+    phone: {
+      type: "string",
+      minLength: 9,
+      example: "0912345678",
+    },
+
+    message: {
+      type: "string",
+      example: "Birthday dinner",
+    },
+
+    reservationDate: {
+      type: "string",
+      format: "date",
+      example: "2026-08-15",
+    },
+
+    reservationTime: {
+      type: "string",
+      example: "18:00",
+    },
+
+    numberOfGuests: {
+      type: "integer",
+      minimum: 1,
+      example: 4,
+    },
+  },
+},
+
+UpdateReservationStatusRequest: {
+  type: "object",
+  required: ["status"],
+  properties: {
+    status: {
+      type: "string",
+      enum: [
+        "PENDING",
+        "CONFIRMED",
+        "CANCELLED",
+        "COMPLETED",
+      ],
+      example: "CONFIRMED",
+    },
+  },
+},
+
     },
   },
 
@@ -549,9 +665,275 @@ UpdateFoodRequest: {
   },
 },
 
+"/api/v1/reservations": {
+  post: {
+    tags: ["Reservation"],
+    summary: "Create a reservation",
+    description:
+      "Creates a reservation. Both guests and authenticated customers can make reservations.",
+    requestBody: {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            $ref: "#/components/schemas/CreateReservationRequest",
+          },
+        },
+      },
+    },
+    responses: {
+      "201": {
+        description: "Reservation created successfully",
+      },
+      "400": {
+        description:
+          "Validation failed or reservation capacity is unavailable",
+      },
+    },
+  },
+
+  get: {
+    tags: ["Reservation"],
+    summary: "Get all reservations",
+    description:
+      "Retrieves all reservations. Staff or owner access is required.",
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+    responses: {
+      "200": {
+        description: "Reservations retrieved successfully",
+      },
+      "401": {
+        description: "Authentication required",
+      },
+      "403": {
+        description: "Access denied",
+      },
+    },
+  },
+},
+
+"/api/v1/reservations/my": {
+  get: {
+    tags: ["Reservation"],
+    summary: "Get my reservations",
+    description:
+      "Retrieves reservations belonging to the authenticated customer.",
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+    responses: {
+      "200": {
+        description: "Reservations retrieved successfully",
+      },
+      "401": {
+        description: "Authentication required",
+      },
+    },
+  },
+},
+
+"/api/v1/reservations/{id}/status": {
+  patch: {
+    tags: ["Reservation"],
+    summary: "Update reservation status",
+    description:
+      "Updates the status of a reservation.",
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+    parameters: [
+      {
+        name: "id",
+        in: "path",
+        required: true,
+        description: "Reservation ID",
+        schema: {
+          type: "string",
+          format: "uuid",
+        },
+      },
+    ],
+    requestBody: {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            $ref:
+              "#/components/schemas/UpdateReservationStatusRequest",
+          },
+        },
+      },
+    },
+    responses: {
+      "200": {
+        description:
+          "Reservation status updated successfully",
+      },
+      "401": {
+        description: "Authentication required",
+      },
+      "403": {
+        description: "Access denied",
+      },
+      "404": {
+        description: "Reservation not found",
+      },
+    },
+  },
+},
+
+"/api/v1/orders": {
+  post: {
+    tags: ["Order"],
+    summary: "Create a new order",
+    description: "Creates a new order for the authenticated customer.",
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+    requestBody: {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            $ref: "#/components/schemas/CreateOrderRequest",
+          },
+        },
+      },
+    },
+    responses: {
+      "201": {
+        description: "Order created successfully",
+      },
+      "400": {
+        description: "Validation failed",
+      },
+      "401": {
+        description: "Authentication required",
+      },
+    },
+  },
+
+  get: {
+    tags: ["Order"],
+    summary: "Get all orders",
+    description: "Retrieves all orders. Owner access is required.",
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+    responses: {
+      "200": {
+        description: "Orders retrieved successfully",
+      },
+      "401": {
+        description: "Authentication required",
+      },
+      "403": {
+        description: "Access denied",
+      },
+    },
+  },
+},
+
+"/api/v1/orders/my": {
+  get: {
+    tags: ["Order"],
+    summary: "Get my orders",
+    description: "Retrieves orders belonging to the authenticated customer.",
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+    responses: {
+      "200": {
+        description: "Orders retrieved successfully",
+      },
+      "401": {
+        description: "Authentication required",
+      },
+    },
+  },
+},
+
+"/api/v1/orders/{id}/status": {
+  patch: {
+    tags: ["Order"],
+    summary: "Update order status",
+    description: "Updates the status of an order. Owner access is required.",
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+    parameters: [
+      {
+        name: "id",
+        in: "path",
+        required: true,
+        description: "Order ID",
+        schema: {
+          type: "string",
+          format: "uuid",
+        },
+      },
+    ],
+    requestBody: {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            $ref: "#/components/schemas/UpdateOrderStatusRequest",
+          },
+        },
+      },
+    },
+    responses: {
+      "200": {
+        description: "Order status updated successfully",
+      },
+      "400": {
+        description: "Invalid order status",
+      },
+      "401": {
+        description: "Authentication required",
+      },
+      "403": {
+        description: "Access denied",
+      },
+      "404": {
+        description: "Order not found",
+      },
+    },
+  },
+},
+
 }};
 
+/*export const setupSwagger = (app: Express) => {
+  app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument)
+  );
+};*/
+
 export const setupSwagger = (app: Express) => {
+  app.get("/swagger-json", (req, res) => {
+    res.json(swaggerDocument);
+  });
+
   app.use(
     "/api-docs",
     swaggerUi.serve,
